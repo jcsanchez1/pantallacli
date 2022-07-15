@@ -107,7 +107,7 @@ public class personasDAO {
  * @throws Exception 
  */
     public Boolean existedni(String id) throws Exception {
-        sql = "SELECT COUNT(*) as cantidad FROM tbl_personas where idafiliacion =" + id + ";";
+        sql = "SELECT tbl_personas.id  as cantidad FROM tbl_personas where idafiliacion =" + id + ";";
         rs = cn.ejecutarConsultaprograma(sql);
         while (rs.next()) {
             respuesta = rs.getInt("cantidad");
@@ -123,7 +123,7 @@ public class personasDAO {
  * @throws Exception 
  */
     public int obtenerid(String dni) throws Exception {
-        sql = "SELECT id FROM tbl_personas where idafiliacion =" + dni + ";";
+        sql = "SELECT id as cantidad FROM tbl_personas where idafiliacion =" + dni + ";";
         rs = cn.ejecutarConsultaprograma(sql);
         while (rs.next()) {
             respuesta = rs.getInt("cantidad");

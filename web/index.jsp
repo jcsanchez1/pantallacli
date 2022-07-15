@@ -1,6 +1,8 @@
 <%@page import="com.jcsm.configuracion.Dba"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="com.jcsm.entidades.TblConfiguracion"%>
+<%@include file="/comunes/noatras.jsp" %>
+<%@include file="/comunes/deshabilitar.jsp" %>
 <%
     int respuesta = 0;
     String sql = "";
@@ -10,14 +12,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Main CSS-->
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-        <!-- Font-icon css-->
-        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <title>Sistema de gestion de afiliados - Administracion</title>
+        <%@include file="/comunes/head1.jsp" %>
         <script src="js/md5.js" type="text/javascript"></script>
         <script>
             function modificarPASS() {
@@ -40,14 +35,14 @@
                         sql = "SELECT tbl_configuracion.logo, tbl_configuracion.logopeque, tbl_configuracion.nombre FROM tbl_configuracion";
                         rs = cn.ejecutarConsultaprograma(sql);
                         TblConfiguracion tcon = new TblConfiguracion();
-                        String a1="",a2="",a3="";
+                        String a1 = "", a2 = "", a3 = "";
                         while (rs.next()) {
                             tcon.setLogo(rs.getString(1));
-                            a1=rs.getString(1);
+                            a1 = rs.getString(1);
                             tcon.setLogopeque(rs.getString(2));
-                            a2=rs.getString(2);
+                            a2 = rs.getString(2);
                             tcon.setNombre(rs.getString(3));
-                            a3=rs.getString(3);
+                            a3 = rs.getString(3);
                         }
                 %>
                 <img src="images/<%=a1%>" alt="<%=a3%>"/>
@@ -80,7 +75,7 @@
                         <button name="btn-login" onclick="modificarPASS();"  class="btn btn-primary btn-block"><i class="fa fa-sign-in fa-lg fa-fw"></i>Ingresar</button>
                     </div>
                 </form>
-                <form class="forget-form" action="/administradocs/loginControlador" method="POST">
+                <form class="forget-form" action="/pantallacli/loginControlador" method="POST">
                     <h3 class="login-head"><i class="fa fa-lg fa-fw fa-lock"></i>Recuperar Contraseña?</h3>
                     <div class="form-group">
                         <label class="control-label">EMAIL</label>
@@ -96,19 +91,6 @@
             </div>
         </section>
 
-        <!-- Essential javascripts for application to work-->
-        <script src="js/jquery-3.3.1.min.js"></script>
-        <script src="js/popper.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/main.js"></script>
-        <!-- The javascript plugin to display page loading on top-->
-        <script src="js/plugins/pace.min.js"></script>
-        <script type="text/javascript">
-                            // Login Page Flipbox control
-                            $('.login-content [data-toggle="flip"]').click(function () {
-                                $('.login-box').toggleClass('flipped');
-                                return false;
-                            });
-        </script>
+        <%@include file="/comunes/footer1.jsp" %>
     </body>
 </html>

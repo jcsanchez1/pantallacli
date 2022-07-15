@@ -1,165 +1,151 @@
-<%@page import="com.jcsm.DAO.turnoDAO"%>
-<%@page import="com.jcsm.entidades.TblTurnos"%>
-<%@page import="com.jcsm.configuracion.Dba"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="com.jcsm.entidades.TblPersonas"%>
-<%
-
-    int respuesta = 0;
-    String sql = "";
-    ResultSet rs = null;
-    Dba cn = new Dba();
-    TblTurnos turn = new TblTurnos();
-    turnoDAO tdao = new turnoDAO();
-%>
-<%
-    if (request.getSession(false) == null) {
-        response.sendRedirect("index.jsp");
-    }
-%>
-<%
-    TblPersonas pers = new TblPersonas();
-    pers = (TblPersonas) session.getAttribute("persona");
-    int a,b;
-    
-    a = pers.getIdrol().getIdrol();
-    b =  pers.getIdFilial().getIdfilial();
-    if (a != 5) {
-        response.sendRedirect("prohibido.jsp");
-    }
-%>
-
-
+<%@include file="/comunes/sesion.jsp" %>
+<%@include file="/comunes/noatras.jsp" %>
+<%@include file="/comunes/validar_pant.jsp" %>
+<%@include file="/comunes/deshabilitar.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta name="description" content="Vali is a responsive and free admin theme built with Bootstrap 4, SASS and PUG.js. It's fully customizable and modular.">
-        <!-- Twitter meta-->
-        <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:site" content="@pratikborsadiya">
-        <meta property="twitter:creator" content="@pratikborsadiya">
-        <!-- Open Graph Meta-->
-        <meta property="og:type" content="website">
-        <meta property="og:site_name" content="Vali Admin">
-        <meta property="og:title" content="Vali - Free Bootstrap 4 admin theme">
-        <meta property="og:url" content="http://pratikborsadiya.in/blog/vali-admin">
-        <meta property="og:image" content="http://pratikborsadiya.in/blog/vali-admin/hero-social.png">
-        <meta property="og:description" content="Vali is a responsive and free admin theme built with Bootstrap 4, SASS and PUG.js. It's fully customizable and modular.">
-        <title>Sistema de gestion de afiliados - ${persona.nombre} - Pantalla</title>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Main CSS-->
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-        <!-- Font-icon css-->
-        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <%@include file="/comunes/head1.jsp" %>
+        <meta http-equiv="refresh" content="30">
     </head>
     <body class="app sidebar-mini">
         <!-- Navbar-->
-        <header class="app-header"><a class="app-header__logo" href="admin-index.jsp"><img src="images/logo2.png" height="50px" width="150px" alt=""/></a>
+        <%@include file="/comunes/logo.jsp" %>
+        <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
+        <!-- Navbar Right Menu-->
+        <%@include file="/comunes/navbar.jsp" %>
+    </header>
+    <!-- Sidebar menu-->
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <aside class="app-sidebar">
 
-            <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
-            <!-- Navbar Right Menu-->
-        </header>
-        <!-- Sidebar menu-->
-        <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
-        <aside class="app-sidebar">
+        <%@include file="/comunes/avatar.jsp" %>
+        <div class="row">
+            <%                    int cont2 = 1;
+                if (cont2 > 0) {
+            %>
+            <%
+                try {
+                    sql = "SELECT CONCAT(tbl_personas.nombre,' ', tbl_personas.apellido) AS afiliado, tbl_roles.nombrerol, tbl_servicios.servicio, tbl_filiales.nombrefilial,tbl_turnos.fechacreacion, tbl_turnos.tipo,tbl_turnos.correlativoturno , tbl_turnos.estado  FROM tbl_turnos INNER JOIN tbl_personas ON tbl_turnos.idpersona = tbl_personas.id INNER JOIN tbl_servicios ON tbl_turnos.idservicio = tbl_servicios.idservicios INNER JOIN tbl_filiales ON tbl_turnos.idfilial = tbl_filiales.idfilial INNER JOIN tbl_roles ON tbl_personas.idrol = tbl_roles.idrol WHERE tbl_turnos.estado != 2 AND tbl_turnos.fechacreacion = CURRENT_DATE() AND tbl_turnos.idfilial = " + b + " LIMIT 3";
+                    rs = cn.ejecutarConsultaprograma(sql);
+                    String a1 = "", a2 = " ", a3 = " ", a4 = " ", a5 = " ", a6 = " ", a7 = " ", a8 = "";
+                    while (rs.next()) {
+                        a1 = rs.getString(1);
+                        a2 = rs.getString(2);
+                        a3 = rs.getString(3);
+                        a4 = rs.getString(4);
+                        a5 = rs.getString(5);
+                        a6 = rs.getString(6);
+                        a7 = rs.getString(7);
+                        a8 = rs.getString(8);
 
-            <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="fotos/${persona.foto}" height="75px" width="75px" alt="User Image">
-                <div>
-                    <p class="app-sidebar__user-name">${persona.nombre}</p>
-                    <p class="app-sidebar__user-designation">${persona.idrol.nombrerol}</p>
-                    <p class="app-sidebar__user-designation">${persona.idFilial.nombrefilial}</p>
+            %>
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title"><%=a1%></h5>
+                    <p class="card-text"><%=a3%></p>
+                    <p class="card-text"><%=a7%></p>
+                    <p class="card-text"><%=a6%></p>
+                    <% if (a8.equals("4")) {%>
+                    <p class="btn btn-danger">Perdido</p>
+                    <%} else if (a8.equals("1")) {
+                    %>
+                    <p class="btn btn-secondary">No atendido</p>
+                    <%} else if (a8.equals("3")) {
+                    %>
+                    <p class="btn btn-success">Atendido</p>
+                    <%} else if (a8.equals("2")) { %>
+                    <p class="btn btn-success">Atendiendo</p>
+                    <%}%>
                 </div>
             </div>
-            <div class="row">
-                <div class="card text-center" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-                <br>
-                <div class="card text-center" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-                <br>
-                <div class="card text-center" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                </div>
-            </div>
-        </aside>
-        <main class="app-content">
-            <div class="app-title">
-                <div>
-                    <h1><i class="fa fa-dashboard"></i> Gestions de turnos</h1>
-                    <h5>Atendiendo actualmente</h5>
-                    <div class="row">
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
+
+
+
+            <%}
+                } catch (Exception e) {
+                }
+            } else {
+            %>
+            <p class="text-center">No hay tickets para el dia de hoy</p><%
+                }
+            %>
+
+        </div>
+    </aside>
+    <main class="app-content">
+        <div class="app-title">
+            <div>
+                <h1><i class="fa fa-dashboard"></i> Gestions de turnos</h1>
+                <h5>Atendiendo actualmente</h5>
+                <div class="row">
+                    <%
+                        int cont = 1;
+                        if (cont > 0) {
+                    %>
+                    <%
+                        try {
+                            sql = "SELECT CONCAT(tbl_personas.nombre,' ', tbl_personas.apellido) AS afiliado, tbl_roles.nombrerol, tbl_servicios.servicio, tbl_filiales.nombrefilial,tbl_turnos.fechacreacion, tbl_turnos.tipo,tbl_turnos.correlativoturno , tbl_turnos.estado  FROM tbl_turnos INNER JOIN tbl_personas ON tbl_turnos.idpersona = tbl_personas.id INNER JOIN tbl_servicios ON tbl_turnos.idservicio = tbl_servicios.idservicios INNER JOIN tbl_filiales ON tbl_turnos.idfilial = tbl_filiales.idfilial INNER JOIN tbl_roles ON tbl_personas.idrol = tbl_roles.idrol WHERE tbl_turnos.estado = 2 AND tbl_turnos.fechacreacion = CURRENT_DATE() AND tbl_turnos.idfilial = " + b + " LIMIT 3";
+                            rs = cn.ejecutarConsultaprograma(sql);
+                            String a1 = "", a2 = " ", a3 = " ", a4 = " ", a5 = " ", a6 = " ", a7 = " ", a8 = "";
+                            while (rs.next()) {
+                                a1 = rs.getString(1);
+                                a2 = rs.getString(2);
+                                a3 = rs.getString(3);
+                                a4 = rs.getString(4);
+                                a5 = rs.getString(5);
+                                a6 = rs.getString(6);
+                                a7 = rs.getString(7);
+                                a8 = rs.getString(8);
+
+                    %>
+                    <div class="card text-center" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title"><%=a1%></h5>
+                            <p class="card-text"><%=a3%></p>
+                            <p class="card-text"><%=a7%></p>
+                            <p class="card-text"><%=a6%></p>
+                            <% if (a8.equals("4")) {%>
+                            <p class="btn btn-danger">Perdido</p>
+                            <%} else if (a8.equals("1")) {
+                            %>
+                            <p class="btn btn-secondary">No atendido</p>
+                            <%} else if (a8.equals("3")) {
+                            %>
+                            <p class="btn btn-success">Atendido</p>
+                            <%} else if (a8.equals("2")) { %>
+                            <p class="btn btn-primary">Atendiendo</p>
+                            <%}%>
                         </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
                     </div>
+
+
+
+                    <%}
+                        } catch (Exception e) {
+                        }
+                    } else {
+                    %>
+                    <p class="text-center">No hay tickets para el dia de hoy</p><%
+                        }
+                    %>
+
+
+
                 </div>
-                <ul class="app-breadcrumb breadcrumb">
-                    <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-                    <li class="breadcrumb-item"><a href="#">turnos</a></li>
-                </ul>
+
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="tile text-center">
-                        <iframe width="854" height="480"
-                                src="https://www.youtube.com/embed/8uMzcIy3-NI?autoplay=1&mute=1&loop=1?controls=0">
-                        </iframe>
-                    </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tile text-center">
+                    <iframe width="854" height="480"
+                            src="https://www.youtube.com/embed/8uMzcIy3-NI?autoplay=1&mute=1&loop=1?controls=0">
+                    </iframe>
                 </div>
             </div>
-        </main>
-        <!-- Essential javascripts for application to work-->
-        <script src="js/jquery-3.3.1.min.js"></script>
-        <script src="js/popper.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/main.js"></script>
-        <!-- The javascript plugin to display page loading on top-->
-        <script src="js/plugins/pace.min.js"></script>
-        <!-- Page specific javascripts-->
-        <!-- Google analytics script-->
-        <script type="text/javascript">
-            if (document.location.hostname == 'pratikborsadiya.in') {
-                (function (i, s, o, g, r, a, m) {
-                    i['GoogleAnalyticsObject'] = r;
-                    i[r] = i[r] || function () {
-                        (i[r].q = i[r].q || []).push(arguments)
-                    }, i[r].l = 1 * new Date();
-                    a = s.createElement(o),
-                            m = s.getElementsByTagName(o)[0];
-                    a.async = 1;
-                    a.src = g;
-                    m.parentNode.insertBefore(a, m)
-                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-                ga('create', 'UA-72504830-1', 'auto');
-                ga('send', 'pageview');
-            }
-        </script>
-    </body>
+        </div>
+    </main>
+    <%@include file="/comunes/footer1.jsp" %>
+</body>
 </html>

@@ -70,21 +70,22 @@ public class loginControlador extends HttpServlet {
                     if (respuesta != 0) {
                         tp = lg.Traerdatos(tp);
                         misession.setAttribute("persona", tp);
-                        request.setAttribute("ida", tp.getId());
-                        request.getSession().setAttribute("ids", tp.getId());
+                        misession.setAttribute("usuario", usuario);
+                        misession.setAttribute("ida", tp.getId());
+                        misession.setAttribute("ids", tp.getId());
                         //request.getSession().setAttribute("persona", tp);
-                        request.getSession().setAttribute("filial", tp.getIdFilial().getIdfilial());
-                        request.getSession().setAttribute("rol", tp.getIdrol().getIdrol());
-                        request.getSession().setAttribute("nombrerol", tp.getIdrol().getNombrerol());
-                        request.getSession().setAttribute("nombrefilial", tp.getIdFilial().getNombrefilial());
+                        misession.setAttribute("filial", tp.getIdFilial().getIdfilial());
+                        misession.setAttribute("rol", tp.getIdrol().getIdrol());
+                        misession.setAttribute("nombrerol", tp.getIdrol().getNombrerol());
+                        misession.setAttribute("nombrefilial", tp.getIdFilial().getNombrefilial());
                         if (tp.getIdrol().getIdrol() == 5) {
                             response.sendRedirect("/pantallacli/seleccionar.jsp");
 
                         }  else {
-                            response.sendRedirect("/administradocs/index.jsp?respuesta=" + respuesta);
+                            response.sendRedirect("/pantallacli/index.jsp?respuesta=" + respuesta);
                         }
                     } else {
-                        response.sendRedirect("/administradocs/index.jsp?respuesta=" + respuesta);
+                        response.sendRedirect("/pantallacli/index.jsp?respuesta=" + respuesta);
                     }
                 } catch (Exception ex) {
                     java.util.logging.Logger.getLogger(loginControlador.class.getName()).log(Level.SEVERE, null, ex);
@@ -93,7 +94,7 @@ public class loginControlador extends HttpServlet {
             } else if (request.getParameter("btn-out") != null) {
                 HttpSession session = request.getSession();
                 session.invalidate();
-                response.sendRedirect("/administradocs/index.jsp");
+                response.sendRedirect("/pantallacli/index.jsp");
                 out.print("You are successfully logged out!");
 
                 out.close();
@@ -101,7 +102,7 @@ public class loginControlador extends HttpServlet {
                 String recuperar = request.getParameter("correorecuperar");
                 respuesta = lg.existecorreo(recuperar);
                 if (respuesta < 1) {
-                    response.sendRedirect("/administradocs/index.jsp?respuesta=" + respuesta);
+                    response.sendRedirect("/pantallacli/index.jsp?respuesta=" + respuesta);
                 } else {
                     String pas, pasm5, tok;
                     pas = hel.cadenaAleatoria(10);
@@ -185,10 +186,10 @@ public class loginControlador extends HttpServlet {
                 pass = request.getParameter("txtclave");
                 respuesta = lg.comprobartokenemail(token, email);
                 if (respuesta < 1) {
-                    response.sendRedirect("/administradocs/index.jsp?respuesta=" + respuesta);
+                    response.sendRedirect("/pantallacli/index.jsp?respuesta=" + respuesta);
                 } else {
                     lg.cambiarpassword(email, token, pass);
-                    response.sendRedirect("/administradocs/index.jsp");
+                    response.sendRedirect("/pantallacli/index.jsp");
                 }
             }
         }

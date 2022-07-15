@@ -39,8 +39,8 @@ public class turnoDAO {
         int valor = 0;
 
         sql = "INSERT into tbl_turnos(idfilial, idpersona, correlativoturno, idservicio, idsubservicio, fechacreacion, estado, tipo)\n"
-                + "VALUES("+ tur.getIdfilial().getIdfilial() +","+ tur.getIdpersona().getId() +","+ tur.getCorrelativoturno() +","+ tur.getIdservicio().getIdservicios() +","
-                + tur.getIdsubservicio().getIdsubservicio() +"," + "current_date() ," + tur.getEstado() +",'"+ tur.getTipo()+"');";
+                + "VALUES(" + tur.getIdfilial().getIdfilial() + "," + tur.getIdpersona().getId() + "," + tur.getCorrelativoturno() + "," + tur.getIdservicio().getIdservicios() + ","
+                + tur.getIdsubservicio().getIdsubservicio() + "," + "current_date() ," + tur.getEstado() + ",'" + tur.getTipo() + "');";
 
         try {
             con = cn.conectarprograma();
@@ -53,9 +53,20 @@ public class turnoDAO {
         }
         return valor;
     }
-        public int obtenercorrelativo() throws Exception {
+
+    public int obtenercorrelativo() throws Exception {
         respuesta = 0;
         sql = "SELECT COUNT(tbl_turnos.idfilial)+1 as cantidad FROM tbl_turnos WHERE tbl_turnos.fechacreacion = CURRENT_DATE();";
+        rs = cn.ejecutarConsultaprograma(sql);
+        while (rs.next()) {
+            respuesta = rs.getInt("cantidad");
+        }
+        return respuesta;
+    }
+
+    public int existeturnohoy(int id) throws Exception {
+        respuesta = 0;
+        sql = "SELECT COUNT(*) as cantidad FROM  tbl_turnos WHERE tbl_turnos.idpersona =" + id + " AND tbl_turnos.fechacreacion = CURRENT_DATE();";
         rs = cn.ejecutarConsultaprograma(sql);
         while (rs.next()) {
             respuesta = rs.getInt("cantidad");

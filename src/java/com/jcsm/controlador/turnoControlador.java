@@ -64,38 +64,32 @@ public class turnoControlador extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
+            turn.setEstado(1);
+            String a1, a2, a3, a4;
             HttpSession misession = request.getSession(true);
             int respuesta = 0;
-            if (request.getParameter("btn-crearticket") != null) {
-                try {
-                    turn.setEstado(1);
-                    String a1, a2, a3, a4;
-                    a1 = request.getParameter("dni");
-                    a2 = "1";//request.getParameter("filial");
-                    a3 = "1";//request.getParameter("servicio");
-                    a4 = "1";//request.getParameter("subservicio");
-                    if (pdao.existedni(a1) == false) {
-
-                    } else {
-                        response.sendRedirect("selec-serv.jsp");
-                    }
-                } catch (Exception e) {
-                } finally {
-
+            if (request.getParameter("btn-buscar") != null) {
+                a1 = request.getParameter("dni");
+                if (pdao.existedni(a1) == false) {
+                    response.sendRedirect("crear-persona.jsp");
+                } else {
+                    misession.setAttribute("dni", a1);
+                    response.sendRedirect("selec-serv.jsp");
                 }
-            } else if (request.getParameter("crear-nuevo") != null) {
+            }  else if (request.getParameter("crear-persona") != null) {
 
             } else if (request.getParameter("crear-nuevo") != null) {
             } else if (request.getParameter("btn-crearticket") != null) {
                 try {
                     turn.setEstado(1);
-                    String a1, a2, a3, a4;
+
                     int id;
                     a1 = request.getParameter("dni");
                     a2 = request.getParameter("filial");
-                    id= pdao.obtenerid(a1);
-                    a3 = "1";request.getParameter("servicio");
-                    a4 = "1";request.getParameter("subservicio");
+                    id = pdao.obtenerid(a1);
+                    misession.setAttribute("afilid", id);
+                    a3 = request.getParameter("servicio");
+                    a4 = request.getParameter("subservicio");
                     turn.setCorrelativoturno(tdao.obtenercorrelativo());
                     int idper = id;
                     int filial = Integer.parseInt(a2);

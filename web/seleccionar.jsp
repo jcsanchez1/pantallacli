@@ -1,49 +1,12 @@
-<%@page import="com.jcsm.configuracion.Dba"%>
-<%@page import="java.sql.ResultSet"%>
 <%@page import="com.jcsm.entidades.TblConfiguracion"%>
-<%
-    int respuesta = 0;
-    String sql = "";
-    ResultSet rs = null;
-    Dba cn = new Dba();
-%>
-<%@page import="com.jcsm.entidades.TblPersonas"%>
-<%
-    if (request.getSession(false) == null) {
-        response.sendRedirect("index.jsp");
-    }
-%>
-<%
-    TblPersonas pers = new TblPersonas();
-    pers = (TblPersonas) session.getAttribute("persona");
-    int idfil = pers.getIdFilial().getIdfilial();
-    int a;
-    a = pers.getIdrol().getIdrol();
-    if (a != 5) {
-        response.sendRedirect("prohibido.jsp");
-    }
-%>
+<%@include file="/comunes/sesion.jsp" %>
+<%@include file="/comunes/noatras.jsp" %>
+<%@include file="/comunes/validar_pant.jsp" %>
+<%@include file="/comunes/deshabilitar.jsp" %>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Main CSS-->
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-        <!-- Font-icon css-->
-        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <title>Sistema de gestion de afiliados - Administracion</title>
-        <script src="js/md5.js" type="text/javascript"></script>
-        <script>
-            function modificarPASS() {
-                let sinCifrar = document.getElementById("txtclave2").value;
-                let cifrado = hex_md5(sinCifrar);
-                document.getElementById("txtclave").value = cifrado;
-                console.log(sinCifrar);
-                console.log(cifrado);
-            }
-        </script>
+        <%@include file="/comunes/head1.jsp" %>
     </head>
     <body>
         <section class="material-half-bg">
@@ -98,19 +61,6 @@
             </div>
         </section>
 
-        <!-- Essential javascripts for application to work-->
-        <script src="js/jquery-3.3.1.min.js"></script>
-        <script src="js/popper.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/main.js"></script>
-        <!-- The javascript plugin to display page loading on top-->
-        <script src="js/plugins/pace.min.js"></script>
-        <script type="text/javascript">
-            // Login Page Flipbox control
-            $('.login-content [data-toggle="flip"]').click(function () {
-                $('.login-box').toggleClass('flipped');
-                return false;
-            });
-        </script>
+        <%@include file="/comunes/footer1.jsp" %>
     </body>
 </html>
